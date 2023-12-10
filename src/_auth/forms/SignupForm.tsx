@@ -14,14 +14,26 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { signupSchema } from "@/lib/validation";
-import { useState } from "react";
+
 import { Loader } from "lucide-react";
-import { Link } from "react-router-dom";
-import { createUserAccount } from "@/lib/appwrite/api";
+import { Link, useNavigate } from "react-router-dom";
+
 import { useToast } from "@/components/ui/use-toast";
+import {
+  useCreateUserAccount,
+  useSignInAccount,
+} from "@/lib/react-query/queriesAndMutations";
+import { useUserContext } from "@/context/AuthContext";
 
 const SignupForm = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { checkAuthUser} = useUserContext();
+  const { mutateAsync: createUserAccount, isPending: isCreatingUser } =
+    useCreateUserAccount();
+  const { mutateAsync: signInAccount } =
+    useSignInAccount();
+
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -43,11 +55,23 @@ const SignupForm = () => {
       });
     }
 
-    // const session  = await signInAccount();
-    // const newUser = await createUserAccount(values);
+    const session = await signInAccount({
+      email: values.email,
+      password: values.password,
+    });
+
+    const isLoggedIn = await checkAuthUser();
+
+    if (isLoggedIn) {
+      form.reset();
+      navigate("/");
+    } else {
+      toast({ title: "Signup Failed" });
+      return;
+    }
     console.log(values);
   }
-  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
@@ -118,7 +142,7 @@ const SignupForm = () => {
             )}
           />
           <Button type="submit" className="shad-button_primary w-240">
-            {isLoading ? (
+            {isCreatingUser ? (
               <div className="flex-center gap-2">
                 <Loader /> Loading
               </div>
