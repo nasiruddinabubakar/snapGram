@@ -19,7 +19,7 @@ import { signinSchema } from "@/lib/validation";
 import { useState } from "react";
 
 const SigninForm = () => {
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const form = useForm<z.infer<typeof signinSchema>>({
     resolver: zodResolver(signinSchema),
     defaultValues: {

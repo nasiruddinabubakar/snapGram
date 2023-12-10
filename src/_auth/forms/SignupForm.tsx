@@ -59,7 +59,7 @@ const SignupForm = () => {
       email: values.email,
       password: values.password,
     });
-
+    console.log(session);
     const isLoggedIn = await checkAuthUser();
 
     if (isLoggedIn) {
