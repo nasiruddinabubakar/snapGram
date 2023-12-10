@@ -18,8 +18,10 @@ import { useState } from "react";
 import { Loader } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createUserAccount } from "@/lib/appwrite/api";
+import { useToast } from "@/components/ui/use-toast";
 
 const SignupForm = () => {
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -32,10 +34,16 @@ const SignupForm = () => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof signupSchema>) {
-    
     const newUser = await createUserAccount(values);
     console.log(newUser);
 
+    if (!newUser) {
+      return toast({
+        title: " Sign up failed. Please try again",
+      });
+    }
+
+    // const session  = await signInAccount();
     // const newUser = await createUserAccount(values);
     console.log(values);
   }
@@ -119,7 +127,13 @@ const SignupForm = () => {
             )}
           </Button>
           <p className="text-small-regular text-light-2 text-center mt-2">
-            Already have an account? <Link to={'/sign-in'} className="text-primary-500 text-small-semibold ml-1">Login</Link>
+            Already have an account?{" "}
+            <Link
+              to={"/sign-in"}
+              className="text-primary-500 text-small-semibold ml-1"
+            >
+              Login
+            </Link>
           </p>
         </form>
       </div>
