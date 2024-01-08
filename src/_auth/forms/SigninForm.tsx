@@ -14,21 +14,46 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signinSchema } from "@/lib/validation";
 import { useState } from "react";
 
+import { useSignInAccount } from "@/lib/react-query/queriesAndMutations";
+import { useToast } from "@/components/ui/use-toast";
+import { useUserContext } from "@/context/AuthContext";
+
 const SigninForm = () => {
   const [isLoading] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const { checkAuthUser } = useUserContext();
+  const { mutateAsync: signInAccount } = useSignInAccount();
+
   const form = useForm<z.infer<typeof signinSchema>>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof signinSchema>) {
+    console.log(values);
+
+    const session = await signInAccount({
+      email: values.email,
+      password: values.password,
+    });
+    console.log(session);
+    const isLoggedIn = await checkAuthUser();
+
+    if (isLoggedIn) {
+      form.reset();
+      navigate("/");
+    } else {
+      toast({ title: "Signup Failed" });
+      return;
+    }
     console.log(values);
   }
 
@@ -47,7 +72,7 @@ const SigninForm = () => {
         >
           <FormField
             control={form.control}
-            name="username"
+            name="email"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Username</FormLabel>
@@ -97,3 +122,6 @@ const SigninForm = () => {
   );
 };
 export default SigninForm;
+function checkAuthUser() {
+  throw new Error("Function not implemented.");
+}
