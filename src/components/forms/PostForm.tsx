@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,7 +18,7 @@ import { Models } from "appwrite";
 import { useCreatePost } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { toast, useToast } from "../ui/use-toast";
+import {  useToast } from "../ui/use-toast";
 import { Loader } from "lucide-react";
 
 type PostFormProps = {

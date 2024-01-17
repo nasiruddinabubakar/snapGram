@@ -122,6 +122,3 @@ const SigninForm = () => {
   );
 };
 export default SigninForm;
-function checkAuthUser() {
-  throw new Error("Function not implemented.");
-}
