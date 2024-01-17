@@ -32,8 +32,9 @@ const LeftSidebar = () => {
           <div className="flex flex-col">
             <p className="body-bold">
               {user.name}
+              </p>
               <p className="small-regular text-light-3">{user.username}</p>
-            </p>
+           
           </div>
         </Link>
         <ul className="flex flex-col gap-6">

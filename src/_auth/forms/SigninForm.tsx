@@ -98,7 +98,7 @@ const SigninForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="shad-button_primary w-240">
+          <Button type="submit" className="shad-button_primary w-full">
             {isLoading ? (
               <div className="flex-center gap-2">
                 <Loader /> Loading

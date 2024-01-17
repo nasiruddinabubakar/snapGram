@@ -1,4 +1,4 @@
-import {Client, Account, Databases, Avatars} from 'appwrite'
+import {Client, Account, Databases, Avatars,Storage} from 'appwrite'
 
 export const appwriteConfig = {
 
@@ -17,3 +17,5 @@ client.setEndpoint(appwriteConfig.url);
 export const account = new Account(client);
 export const databases = new Databases(client);
 export const avatars = new Avatars(client);
+export const storage = new Storage(client);
+// export const storage = new Storage();
